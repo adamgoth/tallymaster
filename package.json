@@ -22,5 +22,8 @@
   "homepage": "",
   "engines": {
     "node": "9.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
   }
 }

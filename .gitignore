@@ -4,6 +4,7 @@ npm-debug.log
 .DS_Store
 /client/node_modules
 serviceAccountKey.json
+config.js
 
 # IntelliJ
 *.iml
