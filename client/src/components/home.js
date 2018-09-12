@@ -17,6 +17,7 @@ class Home extends React.Component {
             {this.props.history.matches.map(match => (
               <div key={match.id}>
                 <p>{match.id}</p>
+                <p>{match.date}</p>
                 {Object.keys(match.results).map(result => (
                   <p key={Math.random()}>{`${result}: ${
                     match.results[result]

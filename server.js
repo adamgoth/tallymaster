@@ -78,14 +78,20 @@ async function getHistory() {
         for (var i = 0; i < activities.length; i++) {
           if (dataObject[activities[i].activityDetails.instanceId]) {
             dataObject[activities[i].activityDetails.instanceId] = {
-              ...dataObject[activities[i].activityDetails.instanceId],
-              [users[u].name]:
-                activities[i].values.opponentsDefeated.basic.displayValue
+              period: activities[i].period,
+              results: {
+                ...dataObject[activities[i].activityDetails.instanceId].results,
+                [users[u].name]:
+                  activities[i].values.opponentsDefeated.basic.displayValue
+              }
             };
           } else {
             dataObject[activities[i].activityDetails.instanceId] = {
-              [users[u].name]:
-                activities[i].values.opponentsDefeated.basic.displayValue
+              period: activities[i].period,
+              results: {
+                [users[u].name]:
+                  activities[i].values.opponentsDefeated.basic.displayValue
+              }
             };
           }
         }

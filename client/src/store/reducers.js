@@ -6,10 +6,12 @@ export default function(state = {}, action) {
       const tallies = {};
       const filtered = Object.keys(action.payload.data.history)
         .filter(
-          match => Object.values(action.payload.data.history[match]).length >= 3
+          match =>
+            Object.values(action.payload.data.history[match].results).length >=
+            3
         )
         .map(key => {
-          return { id: key, results: action.payload.data.history[key] };
+          return { id: key, results: action.payload.data.history[key].results };
         });
       for (let i = 0; i < filtered.length; i++) {
         const highScore = Math.max(...Object.values(filtered[i].results));
@@ -23,10 +25,15 @@ export default function(state = {}, action) {
         matches: Object.keys(action.payload.data.history)
           .filter(
             match =>
-              Object.values(action.payload.data.history[match]).length >= 3
+              Object.values(action.payload.data.history[match].results)
+                .length >= 3
           )
           .map(key => {
-            return { id: key, results: action.payload.data.history[key] };
+            return {
+              id: key,
+              date: action.payload.data.history[key].period,
+              results: action.payload.data.history[key].results
+            };
           }),
         lastUpdated: action.payload.data.lastUpdated,
         tallies: tallies
