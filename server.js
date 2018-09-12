@@ -107,6 +107,7 @@ async function getHistory() {
     .database()
     .ref("/lastUpdated")
     .set(Date.now());
+  console.log(`Database updated at ${new Date()}`);
 }
 
 getHistory();
