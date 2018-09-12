@@ -25,35 +25,88 @@ admin.initializeApp({
 
 var instance = axios.create({
   baseURL: "https://www.bungie.net/Platform/",
-  timeout: 3000,
+  timeout: 60000,
   headers: { "x-api-key": config.apiKey }
 });
 
 async function getHistory() {
-  var dataPresent = true;
-  var page = 1;
+  var users = [
+    {
+      name: "apg129",
+      membershipId: "4611686018433685165",
+      characterId: "2305843009267349564"
+    },
+    {
+      name: "Bruppus",
+      membershipId: "4611686018441977141",
+      characterId: "2305843009276956754"
+    },
+    {
+      name: "Hank_Hanlo",
+      membershipId: "4611686018429318835",
+      characterId: "2305843009265819813"
+    },
+    {
+      name: "HunkleMyDunkle",
+      membershipId: "4611686018429329181",
+      characterId: "2305843009278879052"
+    },
+    {
+      name: "l3rockLanders",
+      membershipId: "4611686018429402428",
+      characterId: "2305843009270974650"
+    },
+    {
+      name: "s-jel",
+      membershipId: "4611686018428506453",
+      characterId: "2305843009264672532"
+    }
+  ];
+
   var dataObject = {};
-  while (dataPresent) {
-    var req = await instance.get(
-      `Destiny2/2/Account/4611686018433685165/Character/2305843009267349564/Stats/Activities?mode=5&page=${page}`
-    );
-    if (dig(req.data, "Response", "activities")) {
-      var activities = req.data.Response.activities;
-      for (var i = 0; i < activities.length; i++) {
-        dataObject[activities[i].activityDetails.instanceId] =
-          activities[i].values.opponentsDefeated.basic.displayValue;
+  for (var u = 0; u < users.length; u++) {
+    var dataPresent = true;
+    var page = 1;
+    while (dataPresent) {
+      var req = await instance.get(
+        `Destiny2/2/Account/${users[u].membershipId}/Character/${
+          users[u].characterId
+        }/Stats/Activities?mode=5&page=${page}`
+      );
+      if (dig(req.data, "Response", "activities")) {
+        var activities = req.data.Response.activities;
+        for (var i = 0; i < activities.length; i++) {
+          if (dataObject[activities[i].activityDetails.instanceId]) {
+            dataObject[activities[i].activityDetails.instanceId] = {
+              ...dataObject[activities[i].activityDetails.instanceId],
+              [users[u].name]:
+                activities[i].values.opponentsDefeated.basic.displayValue
+            };
+          } else {
+            dataObject[activities[i].activityDetails.instanceId] = {
+              [users[u].name]:
+                activities[i].values.opponentsDefeated.basic.displayValue
+            };
+          }
+        }
+        console.log(
+          `Fetching page ${page} from activity history for ${users[u].name}`
+        );
+        page++;
+      } else {
+        console.log(`End of results for ${users[u].name}`);
+        dataPresent = false;
       }
-      page++;
-      console.log(page);
-    } else {
-      console.log("end");
-      dataPresent = false;
-      admin
-        .database()
-        .ref("/apg129")
-        .set(dataObject);
     }
   }
+  admin
+    .database()
+    .ref("/history")
+    .set(dataObject);
+  admin
+    .database()
+    .ref("/lastUpdated")
+    .set(Date.now());
 }
 
 getHistory();
@@ -79,6 +132,16 @@ app.use(function(req, res, next) {
 //GET entries
 app.get("/", function(req, res) {
   res.send("welcome");
+});
+
+app.get("/history", function(req, res) {
+  admin
+    .database()
+    .ref("/")
+    .once("value")
+    .then(snapshot => {
+      res.send(snapshot.val());
+    });
 });
 
 //listener
