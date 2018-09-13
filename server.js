@@ -14,13 +14,12 @@ var PORT = process.env.PORT || 3001;
 //initialize firebase
 var admin = require("firebase-admin");
 var serviceAccount;
+var config;
 
 if (!process.env.FIREBASE_PRIVATE_KEY) {
   serviceAccount = require("./serviceAccountKey.json");
+  config = require("./config.js");
 }
-
-//config
-var config = require("./config.js");
 
 if (process.env.FIREBASE_PRIVATE_KEY) {
   admin.initializeApp({
@@ -40,7 +39,7 @@ if (process.env.FIREBASE_PRIVATE_KEY) {
 var instance = axios.create({
   baseURL: "https://www.bungie.net/Platform/",
   timeout: 60000,
-  headers: { "x-api-key": config.apiKey }
+  headers: { "x-api-key": process.env.API_KEY || config.apiKey }
 });
 
 app.use(bodyParser.json());
