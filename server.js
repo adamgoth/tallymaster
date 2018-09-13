@@ -29,6 +29,14 @@ var instance = axios.create({
   headers: { "x-api-key": config.apiKey }
 });
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.text());
+app.use(bodyParser.json({ type: "application/vnd.api+json" }));
+
+app.use(express.static(path.join(__dirname, "/client")));
+
+//do destiny stuff
 async function getHistory() {
   var users = [
     {
@@ -184,13 +192,7 @@ async function getHistory() {
 }
 
 getHistory();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.text());
-app.use(bodyParser.json({ type: "application/vnd.api+json" }));
-
-app.use(express.static(path.join(__dirname, "/client")));
+setInterval(getHistory, 600000);
 
 //prevent CORS errors
 app.use(function(req, res, next) {
