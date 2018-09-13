@@ -13,7 +13,11 @@ var PORT = process.env.PORT || 3001;
 
 //initialize firebase
 var admin = require("firebase-admin");
-var serviceAccount = require("./serviceAccountKey.json");
+var serviceAccount;
+
+if (!process.env.FIREBASE_PRIVATE_KEY) {
+  serviceAccount = require("./serviceAccountKey.json");
+}
 
 //config
 var config = require("./config.js");
