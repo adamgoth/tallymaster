@@ -18,10 +18,20 @@ var serviceAccount = require("./serviceAccountKey.json");
 //config
 var config = require("./config.js");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://tallymaster-71adb.firebaseio.com/"
-});
+if (process.env.FIREBASE_PRIVATE_KEY) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      private_key: process.env.FIREBASE_PRIVATE_KEY,
+      client_email: process.env.FIREBASE_CLIENT_EMAIL
+    }),
+    databaseURL: "https://tallymaster-71adb.firebaseio.com/"
+  });
+} else {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://tallymaster-71adb.firebaseio.com/"
+  });
+}
 
 var instance = axios.create({
   baseURL: "https://www.bungie.net/Platform/",
