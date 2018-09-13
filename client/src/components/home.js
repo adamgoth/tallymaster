@@ -16,14 +16,14 @@ class Home extends React.Component {
             <table>
               <tbody>
                 <tr>
-                  <th>Guardian</th>
-                  <th>Wins</th>
-                  <th>Games</th>
+                  <th className="Tallies-headerColumn">Guardian</th>
+                  <th className="Tallies-headerColumn">Wins</th>
+                  <th className="Tallies-headerColumn">Games</th>
                 </tr>
                 {this.props.history.tallies
                   .sort((a, b) => (a.score < b.score ? 1 : -1))
                   .map(user => (
-                    <tr key={user.user}>
+                    <tr className="Tallies-dataRow" key={user.user}>
                       <td>{user.user}</td>
                       <td>{user.data.wins}</td>
                       <td>{user.data.played}</td>

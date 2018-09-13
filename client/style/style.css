@@ -5,3 +5,11 @@
 body {
   margin: 0;
 }
+
+.Tallies-headerColumn {
+  padding: 0 10px;
+}
+
+.Tallies-dataRow {
+  text-align: center;
+}
