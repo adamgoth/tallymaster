@@ -17,7 +17,35 @@ export default function(state = {}, action) {
         const highScore = Math.max(...Object.values(filtered[i].results));
         for (const player in filtered[i].results) {
           if (filtered[i].results[player] === highScore.toString()) {
-            tallies[player] ? tallies[player]++ : (tallies[player] = 1);
+            if (tallies[player]) {
+              tallies[player].data = {
+                ...tallies[player].data,
+                wins: tallies[player].wins
+                  ? tallies[player].wins++
+                  : (tallies[player].wins = 1),
+                played: tallies[player].played
+                  ? tallies[player].played++
+                  : (tallies[player].played = 1)
+              };
+            } else {
+              tallies[player] = {
+                wins: 1,
+                played: 1
+              };
+            }
+          } else {
+            if (tallies[player]) {
+              tallies[player].data = {
+                ...tallies[player].data,
+                played: tallies[player].played
+                  ? tallies[player].played++
+                  : (tallies[player].played = 1)
+              };
+            } else {
+              tallies[player] = {
+                played: 1
+              };
+            }
           }
         }
       }
@@ -37,7 +65,10 @@ export default function(state = {}, action) {
           }),
         lastUpdated: action.payload.data.lastUpdated,
         tallies: Object.keys(tallies).map(user => {
-          return { user: user, score: tallies[user] };
+          return {
+            user: user,
+            data: { wins: tallies[user].wins, played: tallies[user].played }
+          };
         })
       };
     default:

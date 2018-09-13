@@ -9,24 +9,27 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <React.Fragment>
         {dig(this.props, "history", "tallies", "length") > 0 && (
           <div className="Tallies">
             <table>
-              <tr>
-                <th>Guardian</th>
-                <th>Wins</th>
-              </tr>
-              {this.props.history.tallies
-                .sort((a, b) => (a.score < b.score ? 1 : -1))
-                .map(user => (
-                  <tr>
-                    <td>{user.user}</td>
-                    <td>{user.score}</td>
-                  </tr>
-                ))}
+              <tbody>
+                <tr>
+                  <th>Guardian</th>
+                  <th>Wins</th>
+                  <th>Games</th>
+                </tr>
+                {this.props.history.tallies
+                  .sort((a, b) => (a.score < b.score ? 1 : -1))
+                  .map(user => (
+                    <tr key={user.user}>
+                      <td>{user.user}</td>
+                      <td>{user.data.wins}</td>
+                      <td>{user.data.played}</td>
+                    </tr>
+                  ))}
+              </tbody>
             </table>
             {dig(this.props, "history", "lastUpdated") && (
               <p>{`Last updated: ${new Date(
