@@ -36,7 +36,9 @@ export default function(state = {}, action) {
             };
           }),
         lastUpdated: action.payload.data.lastUpdated,
-        tallies: tallies
+        tallies: Object.keys(tallies).map(user => {
+          return { user: user, score: tallies[user] };
+        })
       };
     default:
       return state;
