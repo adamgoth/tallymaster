@@ -24,7 +24,7 @@ if (!process.env.FIREBASE_PRIVATE_KEY) {
 if (process.env.FIREBASE_PRIVATE_KEY) {
   admin.initializeApp({
     credential: admin.credential.cert({
-      private_key: process.env.FIREBASE_PRIVATE_KEY,
+      private_key: JSON.parse(process.env.FIREBASE_PRIVATE_KEY),
       client_email: process.env.FIREBASE_CLIENT_EMAIL
     }),
     databaseURL: "https://tallymaster-71adb.firebaseio.com/"
