@@ -11,6 +11,7 @@ class Home extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <h1 className="Tallymaster">Tallymaster!</h1>
         {dig(this.props, "history", "tallies", "length") > 0 && (
           <div className="Tallies">
             <table>
@@ -34,25 +35,47 @@ class Home extends React.Component {
             {dig(this.props, "history", "lastUpdated") && (
               <p>{`Last updated: ${new Date(
                 this.props.history.lastUpdated
-              )}`}</p>
+              ).toLocaleString()}`}</p>
             )}
           </div>
         )}
-        {/* {dig(this.props, "history", "matches", "length") > 0 && (
+        {dig(this.props, "history", "matches", "length") > 0 && (
           <div className="MatchHistory">
-            {this.props.history.matches.map(match => (
-              <div key={match.id}>
-                <p>{match.id}</p>
-                <p>{match.date}</p>
-                {Object.keys(match.results).map(result => (
-                  <p key={Math.random()}>{`${result}: ${
-                    match.results[result]
-                  }`}</p>
-                ))}
-              </div>
-            ))}
+            <table>
+              <tbody>
+                <tr>
+                  <th className="Tallies-headerColumn">Match ID</th>
+                  <th className="Tallies-headerColumn">Date</th>
+                  <th className="Tallies-headerColumn">Results</th>
+                </tr>
+                {this.props.history.matches
+                  .sort((a, b) => (a.date < b.date ? 1 : -1))
+                  .map(match => (
+                    <tr className="Tallies-dataRow" key={match.id}>
+                      <td>{match.id}</td>
+                      <td>{new Date(match.date).toLocaleString()}</td>
+                      <td className="MatchHistory-scores">
+                        {Object.keys(match.results)
+                          .sort(
+                            (a, b) =>
+                              match.results[a] < match.results[b] ? 1 : -1
+                          )
+                          .map(result => (
+                            <span
+                              className="MatchHistory-score"
+                              key={Math.random()}
+                            >
+                              {`${result}: ${match.results[result]}`}
+                              <br />
+                            </span>
+                          ))}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
           </div>
-        )} */}
+        )}
       </React.Fragment>
     );
   }

@@ -6,10 +6,32 @@ body {
   margin: 0;
 }
 
+table {
+  width: 100%;
+}
+
+.Tallymaster {
+  text-align: center;
+}
+
+.Tallies,
+.MatchHistory {
+  margin: 0 20px 50px 20px;
+}
+
 .Tallies-headerColumn {
   padding: 0 10px;
+  width: 33%;
 }
 
 .Tallies-dataRow {
   text-align: center;
+}
+
+.MatchHistory-scores {
+  padding: 15px;
+}
+
+.MatchHistory-score {
+  padding: 5px;
 }
