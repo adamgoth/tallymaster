@@ -144,13 +144,26 @@ async function getHistory() {
     var dataPresent = true;
     var page = 0;
     while (dataPresent) {
-      var req = await instance.get(
-        `Destiny2/2/Account/${users[u].membershipId}/Character/${
-          users[u].characterId
-        }/Stats/Activities?mode=5&page=${page}`
-      );
-      if (req.error) {
-        console.log(req);
+      try {
+        var req = await instance.get(
+          `Destiny2/2/Account/${users[u].membershipId}/Character/${
+            users[u].characterId
+          }/Stats/Activities?mode=5&page=${page}`
+        );
+      } catch (error) {
+        console.log(error.response.status);
+        console.log(error.response.data);
+        try {
+          var req = await instance.get(
+            `Destiny2/2/Account/${users[u].membershipId}/Character/${
+              users[u].characterId
+            }/Stats/Activities?mode=5&page=${page}`
+          );
+        } catch (error) {
+          console.log(error.response.status);
+          console.log(error.response.data);
+          return;
+        }
       }
       if (dig(req.data, "Response", "activities")) {
         var activities = req.data.Response.activities;
